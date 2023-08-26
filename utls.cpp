@@ -11,10 +11,11 @@ QString Utls::getColumnNames(QSqlQueryModel *model)
   {
     if (i > 0)
     {
-      columnNames.append(",");
+      columnNames.append(", ");
     }
     QString headerText = model->headerData(i, Qt::Horizontal).toString();
     columnNames.append(headerText);
   }
   return columnNames;
 }
+

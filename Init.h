@@ -11,7 +11,7 @@ class Init : public QObject
 public:
     explicit Init(QObject *parent = nullptr);
 
-    bool createDatabase();
+    QSqlDatabase createDatabase();
     bool createTable();
 };
 

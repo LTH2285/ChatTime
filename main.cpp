@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "Init.h"
+#include "utls.h"
 #include <QApplication>
 #include <QDebug>
+#include <QSqlQueryModel>
 
 int main(int argc, char *argv[])
 {
@@ -9,11 +11,15 @@ int main(int argc, char *argv[])
 //    MainWindow w;
 //    w.show();
     Init init;
+    Utls utls;
+    QSqlDatabase db = init.createDatabase();
 
-    init.createDatabase();
 
-    bool b = init.createTable();
-    qDebug() << b;
+    QSqlQueryModel model;
+    model.setQuery("SELECT * FROM user_information_table");
+
+    QString columnNames = utls.getColumnNames(&model);
+    qDebug() << columnNames;
     return a.exec();
 
 //    if (init.createDatabase()) {

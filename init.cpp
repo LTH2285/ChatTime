@@ -4,9 +4,16 @@
 
 Init::Init(QObject *parent) : QObject(parent)
 {
+    QSqlDatabase db = createDatabase();
+    bool b = createTable();
+    if(!b)
+    {
+        qDebug() << "create table error!";
+    }
+    db.close();
 }
 
-bool Init::createDatabase()
+QSqlDatabase Init::createDatabase()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("SQL.db");
@@ -14,11 +21,12 @@ bool Init::createDatabase()
     if (!db.open())
     {
         qWarning() << "Failed to open database:";
-        return false;
+        QSqlDatabase db;
+        return db;
     }
 
     qDebug() << "Database connected!";
-    return true;
+    return db;
 }
 
 bool Init::createTable()
@@ -27,41 +35,48 @@ bool Init::createTable()
 
     bool flag = true;
 
+//用户信息表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS user_information_table (\
                         userID INTEGER PRIMARY KEY,\
-                        username TEXT NOT NULL,\
-                        password TEXT NOT NULL,\
-                        userIP TEXT NOT NULL,\
-                        userPORT INTEGER NOT NULL,\
+                        userName TEXT NOT NULL,\
+                        passWord TEXT NOT NULL,\
                         photo BLOB DEFAULT 'default')");
-    qDebug() << flag;
+//    qDebug() << flag;
 
+//好友关系表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS friend_relationship_table (\
                         userIP TEXT,\
-                        Friend_user_ID TEXT)");
-    qDebug() << flag;
+                        friendID TEXT,\
+                        passed INTEGER)");//0表示还没通过，1表示已经通过
+//    qDebug() << flag;
 
+//群组信息表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS group_info_table (\
                         groupID INTEGER PRIMARY KEY,\
-                        groupname TEXT,\
+                        groupName TEXT,\
                         managerID INTEGER)");
-    qDebug() << flag;
+//    qDebug() << flag;
 
+//群成员表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS group_member_table (\
                         groupID INTEGER PRIMARY KEY,\
-                        userID INTEGER)");
-    qDebug() << flag;
+                        userID TEXT)");
+//注：用户成员ID以逗号隔开，保存为文本
+//    qDebug() << flag;
 
+//群消息表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS message_table (\
                         sendID INTEGER PRIMARY KEY,\
                         recvID INTEGER,\
                         message TEXT,\
-                        send_time TEXT)");
-    qDebug() << flag;
+                        sendTime TEXT)");
+//    qDebug() << flag;
 
+//用户登录信息表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS user_login_table (\
                         userID INTEGER PRIMARY KEY,\
-                        last_login_IP TEXT,\
-                        last_login_time TEXT)");
+                        lastLoginIP TEXT,\
+                        lastLoginPORT INTEGER,\
+                        lastLogintime TEXT)");
     return flag;
 }
