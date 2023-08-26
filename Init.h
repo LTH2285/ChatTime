@@ -12,7 +12,7 @@ public:
     explicit Init(QObject *parent = nullptr);
 
     bool createDatabase();
-    bool createUserTable();
+    bool createTable();
 };
 
 #endif // INIT_H
