@@ -21,5 +21,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QTcpServer* m_s;
+    QList<QTcpSocket *> clients;
 };
 #endif // MAINWINDOW_H

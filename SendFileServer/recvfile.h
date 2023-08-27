@@ -14,6 +14,7 @@ protected:
 
 private:
     QTcpSocket* m_tcp;
+    QMap<QString, QTcpSocket*> clientMap;
 signals:
 
     void over();

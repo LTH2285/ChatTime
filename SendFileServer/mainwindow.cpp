@@ -12,9 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
     m_s=new QTcpServer(this);
 
     connect(m_s,&QTcpServer::newConnection,this,[=](){
-        QTcpSocket* tcp = m_s->nextPendingConnection();
+//        QTcpSocket* tcp = m_s->nextPendingConnection();
+
+        //多个客户端加入
+        QTcpSocket *newClient = m_s->nextPendingConnection();
+        clients.append(newClient);
+
         //创建子线程
-        RecvFile* subThread = new RecvFile(tcp);
+        RecvFile* subThread = new RecvFile(newClient);
         subThread->start();
         connect(subThread,&RecvFile::over,this,[=](){
             subThread->exit();

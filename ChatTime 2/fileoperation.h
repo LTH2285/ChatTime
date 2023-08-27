@@ -15,6 +15,7 @@ public:
     explicit fileOperation(QWidget *parent = nullptr);
     ~fileOperation();
 
+
 signals:
     void startConnect(unsigned short,QString);
     void sendFile(QString path);

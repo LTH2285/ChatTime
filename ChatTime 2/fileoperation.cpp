@@ -14,6 +14,7 @@ fileOperation::fileOperation(QWidget *parent) :
     ui->progressBar->setRange(0,100);
     ui->progressBar->setValue(0);
 
+
     //创建线程对象
     QThread* t =new QThread;
     //创建任务对象
