@@ -14,7 +14,8 @@ int main(int argc, char *argv[])
     Utls utls;
     QSqlDatabase db = init.createDatabase();
 
-
+    
+    
     QSqlQueryModel model;
     model.setQuery("SELECT * FROM user_information_table");
 

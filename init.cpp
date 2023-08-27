@@ -66,7 +66,7 @@ bool Init::createTable()
 
 //群消息表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS message_table (\
-                        sendID INTEGER PRIMARY KEY,\
+                        sendID INTEGER ,\
                         recvID INTEGER,\
                         message TEXT,\
                         sendTime TEXT)");
