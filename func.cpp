@@ -180,3 +180,91 @@ QSqlQuery Func::getChatHistory(int userID1, int userID2)
 
     return query;
 }
+
+//罗样需求功能新加，有一些功能已经在上面给出，如果没在下面找到请去上面看看~
+
+//判断好友关系是否存在
+bool Func::checkFriendship(int userID, int friendID)
+{
+    Utls utls;
+    
+    // 构建查询条件以检查好友关系是否存在
+    QString conditions = "userIP = " + QString::number(userID) + " AND friendID = " + QString::number(friendID);
+    QSqlQuery query = utls.researchi("friend_relationship_table", conditions);
+
+    return query.first(); // 如果好友关系存在，返回 true；否则返回 false
+}
+
+//查询好友列表
+QList<int> Func::getUserFriends(int userID)
+{
+    Utls utls;
+    // 构建查询条件以获取用户的好友列表
+    QString conditions = "userIP = " + QString::number(userID) + " AND passed = 1";
+    QSqlQuery query = utls.researchi("friend_relationship_table", conditions);
+    QList<int> friendList;
+    // 遍历查询结果，将好友的 friendID 添加到列表中
+    while (query.next()) {
+        int friendID = query.value("friendID").toInt();
+        friendList.append(friendID);
+    }
+
+    return friendList;
+}
+
+//插入好友申请信息
+bool Func::sendFriendRequest(int userID, int friendID)
+{
+    Utls utls;
+    
+    // 构建插入数据的值
+    QString values = QString("'%1', '%2', %3").arg(userID).arg(friendID).arg(0); // 初始状态为未通过
+    
+    // 插入数据
+    bool status = utls.creati("friend_relationship_table", values);
+
+    return status;
+}
+
+//删除好友关系信息(同时删除二者间的聊天记录)
+bool Func::deleteFriendAndChat(int userID, int friendID)
+{
+    Utls utls;
+
+    QSqlQueryModel model;
+    model.setQuery("SELECT * FROM friend_relationship_table");
+    QString cols = utls.getColumnNames(&model);
+
+    // 删除好友关系信息
+    QString deleteFriendQuery = "DELETE FROM friend_relationship_table WHERE (userID = :userID AND friendID = :friendID) OR (userID = :friendID AND friendID = :userID)";
+    QSqlQuery deleteFriendQueryObject;
+    deleteFriendQueryObject.prepare(deleteFriendQuery);
+    deleteFriendQueryObject.bindValue(":userID", userID);
+    deleteFriendQueryObject.bindValue(":friendID", friendID);
+    if (!deleteFriendQueryObject.exec()) {
+        qDebug() << "Error deleting friend relationship:" << deleteFriendQueryObject.lastError().text();
+        return false;
+    }
+
+    // 删除聊天记录
+    QString deleteChatQuery = "DELETE FROM message_table WHERE (sendID = :userID AND recvID = :friendID) OR (sendID = :friendID AND recvID = :userID)";
+    QSqlQuery deleteChatQueryObject;
+    deleteChatQueryObject.prepare(deleteChatQuery);
+    deleteChatQueryObject.bindValue(":userID", userID);
+    deleteChatQueryObject.bindValue(":friendID", friendID);
+    if (!deleteChatQueryObject.exec()) {
+        qDebug() << "Error deleting chat history:" << deleteChatQueryObject.lastError().text();
+        return false;
+    }
+
+    qDebug() << "Friendship and chat history deleted for userID:" << userID << "and friendID:" << friendID;
+    return true;
+}
+
+//插入新消息记录
+bool Func::insertNewMessage(int sendID, int recvID, const QString &message, const QString &sendTime)
+{
+    Utls utls;
+    QString values = QString("%1, %2, '%3', '%4'").arg(sendID).arg(recvID).arg(message).arg(sendTime);
+    return utls.creati("message_table", values);
+}

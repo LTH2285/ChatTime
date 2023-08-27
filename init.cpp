@@ -45,7 +45,7 @@ bool Init::createTable()
 
 //好友关系表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS friend_relationship_table (\
-                        userIP TEXT,\
+                        userID TEXT,\
                         friendID TEXT,\
                         passed INTEGER)");//0表示还没通过，1表示已经通过
 //    qDebug() << flag;
