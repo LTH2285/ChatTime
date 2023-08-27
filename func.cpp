@@ -7,23 +7,6 @@ Func::Func()
 {
 }
 
-
-//登陆界面查询用户ID密码是否匹配
-bool Func::loginFunction(int userID, const QString password)
-{
-    Utls utls;
-    QSqlQuery query = utls.researchi("user_information_table", "userID=" + QString::number(userID) + " AND passWord='" + password + "'");
-    qDebug() << "userID=" + QString::number(userID) + " AND passWord='" + password + "'";
-    qDebug() << "Query error:" << query.lastError().text();
-    if (query.first()) {
-        qDebug() << "Login successful for userID:" << userID;
-        return true;
-    } else {
-        qDebug() << "Login failed for userID:" << userID;
-        return false;
-    }
-}
-
 //查询用户IP是否存在
 bool Func::checkUserIDExist(int userID)
 {
@@ -61,21 +44,31 @@ int Func::account_register(const QString username, const QString password)
     }
 }
 
-//注册将用户名密码写入数据库
+//登陆界面查询用户ID密码是否匹配
 bool Func::loginFunction(int userID, const QString password)
 {
     Utls utls;
     QSqlQuery query = utls.researchi("user_information_table", "userID=" + QString::number(userID) + " AND passWord='" + password + "'");
-    qDebug() << "userID=" + QString::number(userID) + " AND passWord='" + password + "'";
-    qDebug() << "Query error:" << query.lastError().text();
+
     if (query.first()) {
         qDebug() << "Login successful for userID:" << userID;
+
+        // Update login status
+        QString updateSql = "UPDATE user_information_table SET loginStatus = 1 WHERE userID = :userID";
+        QSqlQuery updateQuery;
+        updateQuery.prepare(updateSql);
+        updateQuery.bindValue(":userID", userID);
+        if (!updateQuery.exec()) {
+            qDebug() << "Error updating login status for userID:" << userID;
+        }
+
         return true;
     } else {
         qDebug() << "Login failed for userID:" << userID;
         return false;
     }
 }
+
 
 // 主界面查询当前用户个人信息(photo、userID、userName)
 QSqlQuery Func::getUserInfo(int userID)
@@ -109,7 +102,7 @@ QSqlQuery Func::getOnlineFriends(int userID)
 
     QString sql = "SELECT DISTINCT friendID FROM friend_relationship_table "
                   "WHERE userIP = :userID AND passed = 1 "
-                  "AND friendID IN (SELECT userID FROM user_login_table)";
+                  "AND friendID IN (SELECT userID FROM user_information_table WHERE loginStatus = 1)";
     query.prepare(sql);
     query.bindValue(":userID", userID);
 
@@ -132,7 +125,7 @@ int Func::getOnlineFriendsCount(int userID)
 
     QString sql = "SELECT COUNT(DISTINCT friendID) FROM friend_relationship_table "
                   "WHERE userIP = :userID AND passed = 1 "
-                  "AND friendID IN (SELECT userID FROM user_login_table)";
+                  "AND friendID IN (SELECT userID FROM user_information_table WHERE loginStatus = 1)";
     query.prepare(sql);
     query.bindValue(":userID", userID);
 
@@ -160,10 +153,22 @@ QSqlQuery Func::getPendingFriendRequests(int userID)
 QSqlQuery Func::getGroupChatMembers(int groupID)
 {
     Utls utls;
-    QSqlQuery query = utls.researchi("group_member_table", "groupID=" + QString::number(groupID));
+    QSqlQuery query = utls.researchi("user_information_table", "loginStatus = 1");
 
-    return query;
+    if (query.first()) {
+        QString sql = "SELECT userID FROM group_member_table "
+                      "WHERE groupID = :groupID AND userID IN (SELECT userID FROM user_information_table WHERE loginStatus = 1)";
+        QSqlQuery memberQuery;
+        memberQuery.prepare(sql);
+        memberQuery.bindValue(":groupID", groupID);
+        if (memberQuery.exec()) {
+            return memberQuery;
+        }
+    }
+
+    return QSqlQuery(); // Return an empty query if no members found;
 }
+
 
 // 查询聊天历史记录（单聊）
 QSqlQuery Func::getChatHistory(int userID1, int userID2)

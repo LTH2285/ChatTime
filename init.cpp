@@ -40,8 +40,8 @@ bool Init::createTable()
                         userID INTEGER PRIMARY KEY,\
                         userName TEXT NOT NULL,\
                         passWord TEXT NOT NULL,\
-                        photo BLOB DEFAULT 'default')");
-//    qDebug() << flag;
+                        photo BLOB DEFAULT 'default',\
+                        loginStatus INTEGER DEFAULT 0)");
 
 //好友关系表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS friend_relationship_table (\
