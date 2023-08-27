@@ -7,6 +7,23 @@ Func::Func()
 {
 }
 
+
+//登陆界面查询用户ID密码是否匹配
+bool Func::loginFunction(int userID, const QString password)
+{
+    Utls utls;
+    QSqlQuery query = utls.researchi("user_information_table", "userID=" + QString::number(userID) + " AND passWord='" + password + "'");
+    qDebug() << "userID=" + QString::number(userID) + " AND passWord='" + password + "'";
+    qDebug() << "Query error:" << query.lastError().text();
+    if (query.first()) {
+        qDebug() << "Login successful for userID:" << userID;
+        return true;
+    } else {
+        qDebug() << "Login failed for userID:" << userID;
+        return false;
+    }
+}
+
 //查询用户IP是否存在
 bool Func::checkUserIDExist(int userID)
 {

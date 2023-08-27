@@ -8,7 +8,7 @@ class Func
 {
 public:
     Func();
-    bool loginFunction(const int userID, const QString &password);
+    
     bool checkUserIDExist(int userID);
     int account_register(const QString username, const QString password);
     bool loginFunction(int userID, const QString password);
