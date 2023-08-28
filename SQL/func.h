@@ -4,6 +4,13 @@
 #include <QString>
 #include <QSqlQuery>
 
+// 声明 FriendInfo 结构体
+struct FriendInfo {
+    int friendID;
+    QString friendUsername;
+    bool isOnline;
+};
+
 class Func
 {
 public:
@@ -18,6 +25,14 @@ public:
     QSqlQuery getPendingFriendRequests(int userID);
     QSqlQuery getGroupChatMembers(int groupID);
     QSqlQuery getChatHistory(int userID1, int userID2);
+    bool checkFriendship(int userID, int friendID);
+    bool sendFriendRequest(int userID, int friendID);
+    bool deleteFriendAndChat(int userID, int friendID);
+    bool insertNewMessage(int sendID, int recvID, const QString &message, const QString &sendTime);
+    int creategroupchat(int userID);
+    bool addFriendToGroup(int groupID, int friendID);
+    QList<FriendInfo> getUserFriendsWithInfo(int userID);
+
 };
 
 #endif // FUNC_H
