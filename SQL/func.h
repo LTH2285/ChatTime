@@ -18,6 +18,7 @@ public:
 
     bool checkUserIDExist(int userID);
     int account_register(const QString username, const QString password);
+    QString hashPassword(const QString &password);
     bool loginFunction(int userID, const QString password);
     QSqlQuery getUserInfo(int userID);
     QSqlQuery getOnlineFriends(int userID);

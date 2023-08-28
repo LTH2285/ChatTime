@@ -2,6 +2,8 @@
 #include "utls.h"
 #include <QDebug>
 #include <Init.h>
+#include <QCryptographicHash>
+
 
 Func::Func()
 {
@@ -40,7 +42,11 @@ int Func::account_register(const QString username, const QString password)
     }
 
     int id = existingrows + 1;
-    QString values = QString("%1, '%2', '%3', NULL").arg(id).arg(username).arg(password);
+
+    // 使用哈希函数对密码进行加密
+    QString hashedPassword = hashPassword(password);
+
+    QString values = QString("%1, '%2', '%3', NULL").arg(id).arg(username).arg(hashedPassword);
     bool status = utls.creati("user_information_table", values);
     if (!status) {
         qDebug() << "Error registering the account.";
@@ -49,6 +55,15 @@ int Func::account_register(const QString username, const QString password)
         qDebug() << "Successfully registered the account with ID:" << id;
         return id; // Return the ID of the newly registered account
     }
+}
+
+QString Func::hashPassword(const QString &password)
+{
+    // 使用 QCryptographicHash 进行密码哈希加密
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(password.toUtf8()); // 将密码转换为字节流并哈希
+    QString hashedPassword = QString(hash.result().toHex()); // 获取哈希结果，并转换为十六进制字符串
+    return hashedPassword;
 }
 
 // 检查给定用户ID的登录凭证是否匹配
@@ -62,12 +77,18 @@ int Func::account_register(const QString username, const QString password)
 bool Func::loginFunction(int userID, const QString password)
 {
     Utls utls;
-    QSqlQuery query = utls.researchi("user_information_table", "userID=" + QString::number(userID) + " AND passWord='" + password + "'");
+
+    // 对输入的密码进行哈希加密
+    QString hashedPassword = hashPassword(password);
+
+    // 构建查询条件，查询用户ID和加密后的密码是否匹配
+    QString conditions = "userID=" + QString::number(userID) + " AND passWord='" + hashedPassword + "'";
+    QSqlQuery query = utls.researchi("user_information_table", conditions);
 
     if (query.first()) {
         qDebug() << "Login successful for userID:" << userID;
 
-        // Update login status
+        // 更新登录状态
         QString updateSql = "UPDATE user_information_table SET loginStatus = 1 WHERE userID = :userID";
         QSqlQuery updateQuery;
         updateQuery.prepare(updateSql);
@@ -82,6 +103,7 @@ bool Func::loginFunction(int userID, const QString password)
         return false;
     }
 }
+
 
 // 获取给定用户的个人信息(头像、用户ID、用户名)
 //
