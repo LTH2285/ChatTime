@@ -4,20 +4,26 @@
 
 Init::Init(QObject *parent) : QObject(parent)
 {
+    // 创建数据库连接
     QSqlDatabase db = createDatabase();
+    // 创建表
     bool b = createTable();
     if (!b)
     {
         qDebug() << "create table error!";
     }
+    // 关闭数据库连接
     db.close();
 }
 
 QSqlDatabase Init::createDatabase()
 {
+    // 创建数据库连接
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    // 设置数据库文件名
     db.setDatabaseName("SQL.db");
 
+    // 打开数据库连接
     if (!db.open())
     {
         qWarning() << "Failed to open database:";
