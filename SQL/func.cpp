@@ -344,3 +344,18 @@ int Func::creategroupchat(int userID)
         return groupID; // 返回新创建的群ID
     }
 }
+
+//邀请好友入群
+bool Func::addFriendToGroup(int groupID, int friendID)
+{
+    // 创建 Utls 实例，用于数据库操作
+    Utls utls;
+    QString values = QString("%1, %2").arg(groupID).arg(friendID);
+       if (utls.creati("group_member_table", values)) {
+           qDebug() << "Successfully invited friend to group chat.";
+           return 0; // 返回成功标志
+       } else {
+           qDebug() << "Error inviting friend to group chat.";
+           return -4; // 返回错误码
+       }
+}
