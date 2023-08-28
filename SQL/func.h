@@ -18,14 +18,6 @@ public:
     QSqlQuery getPendingFriendRequests(int userID);
     QSqlQuery getGroupChatMembers(int groupID);
     QSqlQuery getChatHistory(int userID1, int userID2);
-    bool checkFriendship(int userID, int friendID);
-    QList<int> getUserFriends(int userID);
-    bool sendFriendRequest(int userID, int friendID);
-    bool deleteFriendAndChat(int userID, int friendID);
-    bool insertNewMessage(int sendID, int recvID, const QString &message, const QString &sendTime);
-    int creategroupchat(int userID);
-    bool addFriendToGroup(int groupID, int friendID);
-    
 };
 
 #endif // FUNC_H
