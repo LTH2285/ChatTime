@@ -40,6 +40,7 @@ bool Utls::creati(QString tableName, QString values)
   // 执行SQL语句
   return query.exec(sql);
 }
+
 bool Utls::updatei(QString tableName, QString values, QString conditions)
 {
   // 创建一个查询模型
@@ -120,3 +121,4 @@ int Utls::getRowNumbers(QString tableName)
   // 返回-1表示查询失败
   return -1;
 }
+

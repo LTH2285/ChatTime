@@ -24,6 +24,7 @@ public:
     bool deleteFriendAndChat(int userID, int friendID);
     bool insertNewMessage(int sendID, int recvID, const QString &message, const QString &sendTime);
     int creategroupchat(int userID);
+    bool addFriendToGroup(int groupID, int friendID);
     
 };
 
