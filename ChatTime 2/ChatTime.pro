@@ -22,7 +22,6 @@ SOURCES += \
     fileoperation.cpp \
     home.cpp \
     main.cpp \
-    recvfileclient.cpp \
     register.cpp \
     sendfile.cpp \
     user.cpp \
@@ -35,7 +34,6 @@ HEADERS += \
     facecharacter.h \
     fileoperation.h \
     home.h \
-    recvfileclient.h \
     register.h \
     sendfile.h \
     uishadow.h \
