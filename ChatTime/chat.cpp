@@ -7,13 +7,16 @@
 #include "facecharacter.h"
 
 
-Chat::Chat(const QString &contactname, QWidget *parent) :
+Chat::Chat(const int sendid, const int recvid, const QString sendusername, const QString recvusername, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Chat),
-    m_contactname(contactname)
+    m_sendid(sendid),
+    m_recvid(recvid),
+    m_sendusername(sendusername),
+    m_recvusername(recvusername)
 {
     ui->setupUi(this);
-    this->setWindowTitle(QString("Chat with %1").arg(m_contactname));
+    this->setWindowTitle(QString("Chat with %1").arg(m_recvusername));
 
 
 }
@@ -26,7 +29,7 @@ Chat::~Chat()
 void Chat::on_pushButton_clicked()
 {
     this->close();
-    Home *home = new Home;
+    Home *home = new Home(m_sendid);
     home->show();
 }
 
@@ -34,7 +37,7 @@ void Chat::on_chatSendBtn_clicked()
 {
     QString message = ui->chatInput->text();
     if(!message.trimmed().isEmpty()){
-        ui->chatHistory->append( "I chat to " + m_contactname + " :" + message);
+        ui->chatHistory->append( "I chat to " + m_recvusername + " :" + message);
     }
 
 }

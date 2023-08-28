@@ -11,13 +11,25 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>ChatTime FaceCharacter</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(242, 233, 250);</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QListWidget" name="faceCharacter">
+       <property name="styleSheet">
+        <string notr="true">QListWidget {
+
+	background-color: rgb(255,255,255);
+    border: none;
+    border-radius: 10px;
+
+}</string>
+       </property>
        <property name="viewMode">
         <enum>QListView::IconMode</enum>
        </property>

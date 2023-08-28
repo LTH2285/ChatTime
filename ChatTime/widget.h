@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QtNetwork>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -29,5 +30,6 @@ private slots:
 
 private:
     Ui::Widget *ui;
+    QTcpSocket *tcpSocket;
 };
 #endif // WIDGET_H

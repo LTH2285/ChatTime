@@ -102,7 +102,6 @@ void Home::on_startChatBtn_clicked()
     StartChat();
 }
 
-
 void Home::on_AiChatStartBtn_clicked()
 {
     this->close();

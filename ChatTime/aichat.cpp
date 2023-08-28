@@ -10,7 +10,7 @@
 #include <QJsonObject>
 #include <QDebug>
 
-Aichat::Aichat(QWidget *parent) :
+Aichat::Aichat(const int userid, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Aichat)
 {
@@ -25,7 +25,7 @@ Aichat::~Aichat()
 void Aichat::on_AiQuitBtn_clicked()
 {
     this->close();
-    Home *home = new Home;
+    Home *home = new Home(userid);
     home->show();
 }
 

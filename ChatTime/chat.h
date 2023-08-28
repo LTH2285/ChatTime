@@ -12,7 +12,7 @@ class Chat : public QWidget
     Q_OBJECT
 
 public:
-    explicit Chat(const QString &contactname, QWidget *parent = nullptr);
+    explicit Chat(const int sendid, const int recvid, const QString sendusername, const QString recvusername, QWidget *parent = nullptr);
     ~Chat();
 
     void inserEmojiIntoLineEdit(QString emoji);
@@ -27,7 +27,10 @@ private slots:
 
 private:
     Ui::Chat *ui;
-    QString m_contactname;
+    int m_sendid;
+    int m_recvid;
+    QString m_sendusername;
+    QString m_recvusername;
 };
 
 #endif // CHAT_H

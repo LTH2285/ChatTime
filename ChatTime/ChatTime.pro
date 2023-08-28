@@ -17,32 +17,45 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     aichat.cpp \
+    aipaint.cpp \
     chat.cpp \
     facecharacter.cpp \
     fileoperation.cpp \
+    friendrequest.cpp \
+    groupchat.cpp \
     home.cpp \
+    http.cpp \
     main.cpp \
     register.cpp \
     user.cpp \
-    widget.cpp
+    widget.cpp \
+    protocol.cpp
 
 HEADERS += \
     aichat.h \
+    aipaint.h \
     chat.h \
     chatbubble.h \
     facecharacter.h \
     fileoperation.h \
+    friendrequest.h \
+    groupchat.h \
     home.h \
+    http.h \
     register.h \
     uishadow.h \
     user.h \
-    widget.h
+    widget.h \
+    protocol.h
 
 FORMS += \
     aichat.ui \
+    aipaint.ui \
     chat.ui \
     facecharacter.ui \
     fileoperation.ui \
+    friendrequest.ui \
+    groupchat.ui \
     home.ui \
     register.ui \
     widget.ui

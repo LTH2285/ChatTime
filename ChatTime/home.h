@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QTcpSocket>
 
 namespace Ui {
 class Home;
@@ -14,7 +15,8 @@ class Home : public QWidget
     Q_OBJECT
 
 public:
-    explicit Home(QWidget *parent = nullptr);
+    //explicit Chat(const QString &contactname, QWidget *parent = nullptr);
+    explicit Home(const int &userid, QWidget *parent = nullptr);
     ~Home();
     void CreateFriendList();
     void StartChat();
@@ -30,8 +32,15 @@ private slots:
 
     void on_friendList_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_groupChatBtn_clicked();
+
+    void on_aipaint_clicked();
+
 private:
     Ui::Home *ui;
+    int m_userid;
+    QTcpSocket *tcpSocket;
+
 };
 
 #endif // HOME_H

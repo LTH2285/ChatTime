@@ -19,7 +19,7 @@ class Aichat : public QWidget
     Q_OBJECT
 
 public:
-    explicit Aichat(QWidget *parent = nullptr);
+    explicit Aichat(const int userid, QWidget *parent = nullptr);
     ~Aichat();
 
 
@@ -32,6 +32,7 @@ private slots:
 
 private:
     Ui::Aichat *ui;
+    int userid;
 };
 
 #endif // AICHAT_H
