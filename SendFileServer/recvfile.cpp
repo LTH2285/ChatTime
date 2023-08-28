@@ -1,11 +1,3 @@
-/*
- * @Author: LTH
- * @Date: 2023-08-27 22:39:44
- * @LastEditTime: 2023-08-28 09:12:15
- * @FilePath: \Mini-term-assignments-for-junior-year\SendFileServer\recvfile.cpp
- * @Description:
- * Copyright (c) 2023 by LTH, All Rights Reserved.
- */
 #include "recvfile.h"
 #include <QFile>
 #include <QTcpSocket>
