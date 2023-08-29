@@ -11,13 +11,21 @@ struct FriendInfo {
     bool isOnline;
 };
 
+// 定义一个结构体来表示聊天消息
+struct ChatMessage {
+    int senderID;
+    int recvID;
+    QString message;
+    QString sendTime;
+};
+
 class Func
 {
 public:
     Func();
 
     bool checkUserIDExist(int userID);
-    int account_register(const QString username, const QString password);
+    int account_register(const QString &username, const QString &password, int question, const QString &answer);
     QString hashPassword(const QString &password);
     bool loginFunction(int userID, const QString password);
     QSqlQuery getUserInfo(int userID);
@@ -33,6 +41,15 @@ public:
     int creategroupchat(int userID);
     bool addFriendToGroup(int groupID, int friendID);
     QList<FriendInfo> getUserFriendsWithInfo(int userID);
+    QString getUserName(int userID);
+    bool exportSingleChatHistoryToFile(int userID, int friendID);
+    bool exportGroupChatHistoryToFile(int groupID, const QString &filePath);
+    QString getUserSecurityQuestion(int userID);
+    bool recoverPassword(int userID, const QString &answer, const QString &newPassword);
+    bool insertPhoto(int userID, const QByteArray &photoData);
+    QByteArray getPhoto(int userID);
+    bool insertReadInformation(int userID1, int userID2, int status);
+    int getReadStatus(int userID1, int userID2);
 
 };
 

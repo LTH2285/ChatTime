@@ -3,7 +3,10 @@
 #include <QDebug>
 #include <Init.h>
 #include <QCryptographicHash>
-
+#include <QFile>
+#include <QList>
+#include <QFileDialog>
+#include <QDateTime>
 
 Func::Func()
 {
@@ -32,7 +35,7 @@ bool Func::checkUserIDExist(int userID)
 //
 // 返回值:
 // - 新注册账户的ID,如果有错误则返回-1
-int Func::account_register(const QString username, const QString password)
+int Func::account_register(const QString &username, const QString &password, int question, const QString &answer)
 {
     Utls utls;
     int existingrows = utls.getRowNumbers("user_information_table");
@@ -46,7 +49,10 @@ int Func::account_register(const QString username, const QString password)
     // 使用哈希函数对密码进行加密
     QString hashedPassword = hashPassword(password);
 
-    QString values = QString("%1, '%2', '%3', NULL").arg(id).arg(username).arg(hashedPassword);
+    QString values = QString("%1, '%2', '%3', %4, '%5', NULL")
+                        .arg(id).arg(username).arg(hashedPassword)
+                        .arg(question).arg(answer);
+
     bool status = utls.creati("user_information_table", values);
     if (!status) {
         qDebug() << "Error registering the account.";
@@ -59,7 +65,7 @@ int Func::account_register(const QString username, const QString password)
 
 QString Func::hashPassword(const QString &password)
 {
-    // 使用 QCryptographicHash 进行密码哈希加密
+    // 使用 QCryptographicHash 进行哈希加密
     QCryptographicHash hash(QCryptographicHash::Sha256);
     hash.addData(password.toUtf8()); // 将密码转换为字节流并哈希
     QString hashedPassword = QString(hash.result().toHex()); // 获取哈希结果，并转换为十六进制字符串
@@ -444,4 +450,230 @@ bool Func::addFriendToGroup(int groupID, int friendID)
     }
 }
 
+//获取用户姓名
+QString Func::getUserName(int userID)
+{
+    Utls utls;
+    QSqlQuery query = utls.researchi("user_information_table", "userID = " + QString::number(userID));
 
+    if (query.next()) {
+        return query.value("userName").toString();
+    } else {
+        return "Unknown User";
+    }
+}
+
+//导出聊天记录到本地
+bool Func::exportSingleChatHistoryToFile(int userID, int friendID)
+{
+    Utls utls;
+
+    // 获取聊天记录
+    QSqlQuery query = getChatHistory(userID, friendID);
+
+    QList<ChatMessage> chatHistory;
+
+    while (query.next()) {
+        ChatMessage message;
+        message.senderID = query.value("sendID").toInt();
+        message.recvID = query.value("recvID").toInt();
+        message.message = query.value("message").toString();
+        message.sendTime = query.value("sendTime").toString();
+        chatHistory.append(message);
+    }
+
+    // 构建聊天记录字符串
+    QString chatHistoryText;
+    for (const ChatMessage &message : chatHistory) {
+        QString senderName = getUserName(message.senderID);
+        chatHistoryText += "[" + message.sendTime + "] " + senderName + ": " + message.message + "\n";
+    }
+
+    // 构建文件名（使用当前日期和时间）
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    QString fileName = QString("chat_history_%1.txt").arg(currentDateTime.toString("yyyyMMdd_hhmmss"));
+
+    // 保存聊天记录到文件
+    QString filePath = "../" + fileName; // 设置保存路径
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << chatHistoryText;
+        file.close();
+        qDebug() << "Chat history exported to:" << filePath;
+        return true;
+    } else {
+        qDebug() << "Error exporting chat history.";
+        return false;
+    }
+}
+
+
+
+//导出群聊聊天记录到本地
+//bool Func::exportGroupChatHistoryToFile(int groupID, const QString &filePath)
+//传递用户选择的文件路径作为参数 filePath
+//{
+//    Utls utls;
+
+//    // 查询群聊的聊天记录
+//    QString conditions = "recvID = " + QString::number(groupID) + " ORDER BY sendTime ASC";
+//    QSqlQuery chatQuery = utls.researchi("message_table", conditions);
+
+//    // 检查是否有聊天记录
+//    if (chatQuery.isActive() && chatQuery.first()) {
+//        QFile file(filePath);
+//        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+//            QTextStream stream(&file);
+//            // 逐行写入聊天记录到文件
+//            do {
+//                QString sendTime = chatQuery.value("sendTime").toString();
+//                QString message = chatQuery.value("message").toString();
+//                QString senderName = chatQuery.value("senderName").toString();
+//                QString line = sendTime + " " + senderName + ": " + message;
+//                stream << line << endl;
+//            } while (chatQuery.next());
+
+//            file.close();
+//            qDebug() << "Group chat history exported to file:" << filePath;
+//            return true;
+//        } else {
+//            qDebug() << "Error opening file for writing:" << filePath;
+//            return false;
+//        }
+//    } else {
+//        qDebug() << "No chat history available for group:" << groupID;
+//        return false;
+//    }
+//}
+
+//查询用户的密保问题
+QString Func::getUserSecurityQuestion(int userID)
+{
+    Utls utls;
+    QString query = QString("SELECT question FROM user_information_table WHERE userID = %1").arg(userID);
+    QSqlQuery result = utls.researchi(query, QString()); // Pass an empty QString as the second argument
+
+    if (result.next()) {
+        QString securityQuestion = result.value("question").toString();
+        return securityQuestion;
+    } else {
+        return ""; // Return an empty string if user not found or no question available
+    }
+}
+
+//找回密码
+bool Func::recoverPassword(int userID, const QString &answer, const QString &newPassword)
+{
+    Utls utls;
+
+    // 查询用户的密保问题和答案
+    QSqlQuery query = utls.researchi("user_information_table", "userID=" + QString::number(userID));
+    if (query.next()) {
+        //int storedQuestion = query.value("question").toInt();
+        QString storedAnswer = query.value("answer").toString();
+
+        // 比对密保答案
+        if (answer == storedAnswer) {
+            // 使用哈希函数对新密码进行加密
+            QString hashedPassword = hashPassword(newPassword);
+
+            // 更新数据库中的密码
+            QString updateSql = "UPDATE user_information_table SET passWord = :hashedPassword WHERE userID = :userID";
+            QSqlQuery updateQuery;
+            updateQuery.prepare(updateSql);
+            updateQuery.bindValue(":hashedPassword", hashedPassword);
+            updateQuery.bindValue(":userID", userID);
+
+            if (updateQuery.exec()) {
+                qDebug() << "Password successfully updated for userID:" << userID;
+                return true;
+            } else {
+                qDebug() << "Error updating password for userID:" << userID;
+                return false;
+            }
+        } else {
+            qDebug() << "Incorrect answer to security question.";
+            return false;
+        }
+    } else {
+        qDebug() << "User not found with userID:" << userID;
+        return false;
+    }
+}
+
+//存入用户头像
+bool Func::insertPhoto(int userID, const QByteArray &photoData)
+{
+    Utls utls;
+
+    // 使用参数绑定方式插入 BLOB 数据
+    QSqlQuery query;
+    query.prepare("UPDATE user_information_table SET photo = :photoData WHERE userID = :userID");
+    query.bindValue(":photoData", photoData);
+    query.bindValue(":userID", userID);
+
+    if (query.exec()) {
+        qDebug() << "Photo inserted successfully for userID:" << userID;
+        return true;
+    } else {
+        qDebug() << "Error inserting photo for userID:" << userID;
+        return false;
+    }
+}
+
+//查询用户头像
+QByteArray Func::getPhoto(int userID)
+{
+    Utls utls;
+
+    // 查询用户的照片数据
+    QSqlQuery query = utls.researchi("user_information_table", "userID=" + QString::number(userID));
+    if (query.next()) {
+        QByteArray photoData = query.value("photo").toByteArray();
+        return photoData;
+    } else {
+        qDebug() << "User not found with userID:" << userID;
+        return QByteArray(); // Return an empty QByteArray if user not found
+    }
+}
+
+//插入已读信息
+bool Func::insertReadInformation(int userID1, int userID2, int status)
+{
+    Utls utls;
+
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO read_information_table (userID1, userID2, status) "
+                  "VALUES (:userID1, :userID2, :status)");
+    query.bindValue(":userID1", userID1);
+    query.bindValue(":userID2", userID2);
+    query.bindValue(":status", status);
+
+    if (query.exec()) {
+        qDebug() << "Read information inserted successfully";
+        return true;
+    } else {
+        qDebug() << "Error inserting read information:" << query.lastError().text();
+        return false;
+    }
+}
+
+//查询已读信息
+int Func::getReadStatus(int userID1, int userID2)
+{
+    Utls utls;
+
+    QSqlQuery query = utls.researchi("read_information_table",
+                                     "userID1 = " + QString::number(userID1) +
+                                     " AND userID2 = " + QString::number(userID2));
+
+    if (query.next()) {
+        int status = query.value("status").toInt();
+        return status;
+    } else {
+        qDebug() << "No read information found for userID1:" << userID1 << " and userID2:" << userID2;
+        return -1; // Return -1 to indicate no information found
+    }
+}
