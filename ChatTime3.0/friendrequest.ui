@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FriendRequest</class>
+ <widget class="QWidget" name="FriendRequest">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>387</width>
+    <height>318</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ChatTime Friend Requests</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(242, 233, 250);</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Friend Requests</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="friAppList">
+         <property name="styleSheet">
+          <string notr="true">QListWidget {
+
+	background-color: rgb(255,255,255);
+    border: none;
+    border-radius: 10px;
+
+}</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="addfriendBtn">
+         <property name="text">
+          <string>Add contacts</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="exitBtn">
+         <property name="text">
+          <string>Back to Home</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
