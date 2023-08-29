@@ -302,6 +302,7 @@ QList<FriendInfo> Func::getUserFriendsWithInfo(int userID)
             if (userInfoQuery.next()) {
                 friendInfo.friendUsername = userInfoQuery.value("userName").toString();
                 friendInfo.isOnline = userInfoQuery.value("loginStatus").toInt() == 1;
+                friendInfo.friendPhoto = userInfoQuery.value("photo").toByteArray(); // 获取好友头像数据
             }
 
             friendList.append(friendInfo);
@@ -332,6 +333,7 @@ QList<FriendInfo> Func::getUserFriendsWithInfo(int userID)
             if (userInfoQuery.next()) {
                 friendInfo.friendUsername = userInfoQuery.value("userName").toString();
                 friendInfo.isOnline = userInfoQuery.value("loginStatus").toInt() == 1;
+                friendInfo.friendPhoto = userInfoQuery.value("photo").toByteArray(); // 获取好友头像数据
             }
 
             friendList.append(friendInfo);
