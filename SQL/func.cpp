@@ -638,7 +638,7 @@ QByteArray Func::getPhoto(int userID)
     }
 }
 
-//插入已读信息
+// 插入已读信息，同时互换 userID1 和 userID2 存入两次
 bool Func::insertReadInformation(int userID1, int userID2, int status)
 {
     Utls utls;
@@ -651,13 +651,26 @@ bool Func::insertReadInformation(int userID1, int userID2, int status)
     query.bindValue(":userID2", userID2);
     query.bindValue(":status", status);
 
-    if (query.exec()) {
-        qDebug() << "Read information inserted successfully";
-        return true;
-    } else {
+    bool success = query.exec();
+    
+    if (!success) {
         qDebug() << "Error inserting read information:" << query.lastError().text();
         return false;
     }
+
+    // 互换 userID1 和 userID2 并再次插入一条记录
+    query.bindValue(":userID1", userID2);
+    query.bindValue(":userID2", userID1);
+    
+    success = query.exec();
+
+    if (!success) {
+        qDebug() << "Error inserting read information with swapped IDs:" << query.lastError().text();
+        return false;
+    }
+
+    qDebug() << "Read information inserted successfully for both user IDs";
+    return true;
 }
 
 //查询已读信息
