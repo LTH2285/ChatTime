@@ -41,6 +41,8 @@ public:
     void processFriApp(QTcpSocket* tcpSocket[],Protocol recvinfo);
     void createGroup(QTcpSocket* tcpSocket[],Protocol recvinfo);
     void chatHistory_Group(QTcpSocket* tcpSocket[],Protocol recvinfo);
+    void addPic(QTcpSocket* tcpSocket[],Protocol recvinfo);
+    void detect(QTcpSocket* tcpSocket[],Protocol recvinfo);
    // void viewFriApp(QTcpSocket* tcpSocket[],Protocol recvinfo);
 
 private:

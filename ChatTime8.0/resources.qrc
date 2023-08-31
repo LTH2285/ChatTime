@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>user.svg</file>
+        <file>password.svg</file>
+        <file>plane.png</file>
+        <file>book.png</file>
+        <file>check.svg</file>
+        <file>check2.svg</file>
+        <file>password2.svg</file>
+        <file>username2.svg</file>
+        <file>add.svg</file>
+        <file>ai.svg</file>
+        <file>logout.svg</file>
+        <file>startchat.svg</file>
+        <file>bg.png</file>
+        <file>loginreg.png</file>
+        <file>groupchat.svg</file>
+        <file>paint.svg</file>
+        <file>question.svg</file>
+        <file>addcontact.svg</file>
+        <file>back.svg</file>
+        <file>home.svg</file>
+        <file>recvfile.svg</file>
+        <file>refresh.svg</file>
+        <file>sendmsg.svg</file>
+        <file>sendfile.svg</file>
+        <file>savehistory.svg</file>
+        <file>screenshot.svg</file>
+        <file>default.jpeg</file>
+        <file>sendrequest.svg</file>
+        <file>Icon.jpg</file>
+    </qresource>
+</RCC>

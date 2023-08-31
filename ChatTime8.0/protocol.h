@@ -79,6 +79,7 @@ public:
         stream << info.friendIcon;
         return stream;
     }
+
     friend  QDataStream & operator>> (QDataStream& stream, Protocol& info){
         stream >> info.function_name;
         stream >> info.username;

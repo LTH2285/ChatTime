@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QSqlQuery>
+#include <QImage>
 
 // 声明 FriendInfo 结构体
 struct FriendInfo {
@@ -49,6 +50,8 @@ public:
     bool insertPhoto(int userID, const QByteArray &photoData);
     QByteArray getPhoto(int userID);
     QSqlQuery getChatHistory_Group(int groupID);
+    bool insertUserImage(int userID, const QByteArray &iamgeData);
+    QList<QByteArray> findAllUserImages(int userID);
 
 };
 

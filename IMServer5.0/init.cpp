@@ -35,6 +35,11 @@ bool Init::createTable()
 
     bool flag = true;
 
+// 新建用户图片表
+    flag = flag && query.exec("CREATE TABLE IF NOT EXISTS user_image_table (\
+                        userID INTEGER PRIMARY KEY, \
+                        image BLOB)");
+
 //用户信息表
     flag = flag && query.exec("CREATE TABLE IF NOT EXISTS user_information_table (\
                         userID INTEGER PRIMARY KEY,\

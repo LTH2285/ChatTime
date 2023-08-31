@@ -7,9 +7,70 @@
 #include <QList>
 #include <QFileDialog>
 #include <QDateTime>
+#include <QBuffer>
 
 Func::Func()
 {
+}
+
+//查询用户图片
+QList<QByteArray> Func::findAllUserImages(int userID)
+{
+    QList<QByteArray> images;
+
+    Utls utls;
+    QSqlQuery query;
+    query.prepare("SELECT image FROM user_image_table WHERE userID = :userID");
+    query.bindValue(":userID", userID);
+    query.exec();
+
+    while (query.next()) {
+        QByteArray imageData = query.value(0).toByteArray();
+        images.append(imageData);
+    }
+
+    return images;
+}
+
+//插入用户图片
+bool Func::insertUserImage(int userID, const QByteArray &imageData)
+{
+
+    Utls utls;
+
+    // 使用参数绑定方式插入 BLOB 数据
+    QSqlQuery query;
+    query.prepare("UPDATE user_image_table SET image = :photoData WHERE userID = :userID");
+    query.bindValue(":photoData", imageData);
+    query.bindValue(":userID", userID);
+
+    if (query.exec()) {
+        qDebug() << "Photo inserted successfully for userID:" << userID;
+        return true;
+    } else {
+        qDebug() << "Error inserting photo for userID:" << userID;
+        return false;
+    }
+//    Utls utls;
+
+//    // 使用参数绑定方式插入图片数据
+//    QSqlQuery query;
+//    query.prepare("INSERT INTO user_image_table (userID) VALUES (:userID)");
+//    query.bindValue(":userID", userID);
+
+//    query.exec();
+
+//    query.prepare("UPDATE user_image_table SET photo = :photoData WHERE userID = :userID");
+//    query.bindValue(":photoData", imageData);
+//    query.bindValue(":userID", userID);
+
+//    if (query.exec()) {
+//        qDebug() << "User image inserted successfully for userID:" << userID;
+//        return true;
+//    } else {
+//        qDebug() << "Error inserting image for userID:" << userID;
+//        return false;
+//    }
 }
 
 bool Func::insertPhoto(int userID, const QByteArray &photoData)

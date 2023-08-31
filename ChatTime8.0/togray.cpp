@@ -71,22 +71,38 @@ QImage toGray::toGrayPicture(QImage image)
 
 
     int  kernel[3][3] = {
+        {-3, 0, 3},
+        {-10, 0, 10},
+        {-3, 0, 3}
+      };
+
+//    int  kernel[3][3] = {
+//        {-3, -10, -3},
+//        {0, 0, 0},
+//        {3, 10, 3}
+//      };
+
+//    int  kernel[3][3] = {
+//        {-10, -3, 0},
+//        {-3, 0, 3},
+//        {0, 3, 10}
+//      };
+
+//    int  kernel[3][3] = {
+//        {10, 3, 0},
+//        {3, 0, -3},
+//        {0, -3, -10}
+//      };
+
+//    int  kernel[3][3] = {
 //        {-1, -1, -1},
 //        {-1, 8, -1},
 //        {-1, -1, -1}
+//      };
 
-//        {-3, 0, 3},
-//        {-10, 0, 10},
-//        {-3, 0, 3}
 
-          {-10, -3, 0},
-          {-3, 0, 3},
-          {0, 3, 10}
 
-//        {-1, 0, 1},
-//        {-1, 0, 1},
-//        {-1, 0, 1}
-      };
+
 
 //    int kernel[5][5] = {
 //        {0,0,-1,0,0},
@@ -178,7 +194,7 @@ QVector<int> toGray::toGrayArray(QImage image,int i)
     uchar *bits = ret.bits();
     int bytesPerLine = ret.bytesPerLine();
     int imageSize = bytesPerLine * size;
-    uchar *data = new uchar[size*(size+2)];
+    uchar *data = new uchar[452*450];
 
     memcpy(data, bits, imageSize);
 
@@ -264,7 +280,6 @@ QVector<int> toGray::toGrayArray(QImage image,int i)
             {
                 for (int l = -kernelRadius; l <=kernelRadius; l++)
                 {
-//                    qDebug() << kernel[kernelRadius+k][kernelRadius+l] << data[450*(i+k)+j+l];
                     temp += kernel[kernelRadius+k][kernelRadius+l] * data[450*(i+k)+j+l];
                 }
             }

@@ -88,6 +88,10 @@ void myServer::onMyConnect(){
             createGroup(tcpSocket,recvinfo);
         else if("chatHistory_Group"== recvinfo.function_name)
             chatHistory_Group(tcpSocket,recvinfo);
+        else if("addPic" == recvinfo.function_name)
+            addPic(tcpSocket,recvinfo);
+        else if("detect" == recvinfo.function_name)
+            detect(tcpSocket,recvinfo);
         else
             qDebug() << "zen me shier?";
     });
@@ -585,6 +589,45 @@ void myServer::chatHistory_Group(QTcpSocket **tcpSocket, Protocol recvinfo)
     qDebug()<<"最后的时间戳:"<<ansInfo.userip;
     ansInfo.sendStructData(tcpSocket[0],ansInfo);
 
+}
+
+void myServer::addPic(QTcpSocket *tcpSocket[], Protocol recvinfo){
+    Protocol sendinfo;
+
+    Func sql;
+
+    qDebug()<<recvinfo.ba;
+
+    bool status = sql.insertUserImage(recvinfo.userid, recvinfo.ba);
+
+    if(status){
+        sendinfo.status = 1;
+    }
+    else{
+        sendinfo.status = -1;
+    }
+
+    sendinfo.sendStructData(tcpSocket[0],sendinfo);
+}
+
+void myServer::detect(QTcpSocket *tcpSocket[], Protocol recvinfo){
+
+    qDebug()<<recvinfo.ba;
+
+    Func sql;
+    QList<QByteArray> images = sql.findAllUserImages(recvinfo.userid);
+    qDebug() << images.size();
+
+    Protocol sendinfo;
+    sendinfo.friendIcon = images;
+
+    if(images.size()!=0){
+        sendinfo.status = 1;
+    }
+    else{
+        sendinfo.status = -1;
+    }
+    sendinfo.sendStructData(tcpSocket[0],sendinfo);
 }
 
 myServer::~myServer()

@@ -25,24 +25,5 @@ double cosineSim::cal(QImage img1,QImage img2,int i)
         denom_b += a2[i] * a2[i];
     }
 
-//    int numThreads = 4;
-//    int segment = len / numThreads;
-
-//    QList<SimilarityTask*> tasks;
-//    for (int i = 0; i < numThreads; i++) {
-//      int start = i * segment;
-//      int end = (i + 1) * segment;
-//      if (i == numThreads - 1) {
-//        end = len;
-//      }
-
-//      SimilarityTask *task = new SimilarityTask;
-//      tasks.append(task);
-
-//      pool.start(task);
-//    }
-
-
-
     return dot / (sqrt(denom_a) * sqrt(denom_b));
 }

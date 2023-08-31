@@ -7,7 +7,7 @@ class randomForest
 public:
     randomForest();
     bool makeDecision(QVector<QImage> allPic,QImage shot);
-    double thresholds = 0.2;
+    double thresholds = 0.45;
 };
 
 #endif // RANDOMFOREST_H

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Aichat</class>
+ <widget class="QWidget" name="Aichat">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ChatTime AIChat</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(242, 233, 250);</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QTextEdit" name="AiChatHistory">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);border-radius: 10px;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="AiSendInput">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="placeholderText">
+          <string>Send your request</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="AiChatSendBtn">
+         <property name="statusTip">
+          <string>send</string>
+         </property>
+         <property name="text">
+          <string>Send</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/images/sendmsg.svg</normaloff>:/images/sendmsg.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QPushButton" name="AiQuitBtn">
+           <property name="statusTip">
+            <string>back home</string>
+           </property>
+           <property name="text">
+            <string>Home</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>:/images/home.svg</normaloff>:/images/home.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

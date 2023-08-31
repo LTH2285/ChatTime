@@ -15,16 +15,16 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    addPic ap;
-    ap.show();
+//    addPic ap;
+//    ap.show();
 //    MainWindow w;
 //    w.show();
 
 
-//    QImage *image = new QImage("/home/liutinghan_1120210576/Pictures/login.jpg");
+//    QImage *image = new QImage("/home/liutinghan_1120210576/Desktop/picture/1_1.jpg");
 //    toGray tg;
 //    QImage gray_image = tg.toGrayPicture(*image);
-//    gray_image.save("/home/liutinghan_1120210576/Pictures/lth_gray_conv.jpg");
+//    gray_image.save("/home/liutinghan_1120210576/Desktop/picture/lth_gray_conv.jpg");
 
 //    int* array;
 //    qDebug() << tg.toGrayArray(*image,array);
@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
 
 //    free(image);
 
-//    QImage *image1 = new QImage("/home/liutinghan_1120210576/Desktop/picture/lth1.jpg");
-//    QImage *image2 = new QImage("/home/liutinghan_1120210576/Desktop/picture/wzh3.jpg");
+//    QImage *image1 = new QImage("/home/liutinghan_1120210576/Desktop/picture/lth3.jpg");
+//    QImage *image2 = new QImage("/home/liutinghan_1120210576/Desktop/picture/wyt1.jpg");
 //    cosineSim css;
 //    for(int i = 1;i<5;i++)
 //    {
@@ -61,14 +61,14 @@ int main(int argc, char *argv[])
 //    QVector<QImage> allPic = findAllUserImages(ID);//需要连接
 //    rf.makeDecision(allPic,*shot);
 
-//    QString path = "/home/liutinghan_1120210576/Desktop/picture/txs3.jpg";
-//    QImage *image = new QImage(path);
-//    if(image->width()>800)
-//    {
-//        QImage out = image->scaled(800,450,Qt::KeepAspectRatio, Qt::SmoothTransformation);
-//        bool flag = out.save(path, "JPG", 15);
-//            qDebug() << flag;
-//    }
+    QString path = "/home/liutinghan_1120210576/Desktop/picture/23-08-31 16-27-25.jpg";
+    QImage *image = new QImage(path);
+    if(image->width()>160)
+    {
+        QImage out = image->scaled(160,90,Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        bool flag = out.save(path, "JPG", 20);
+            qDebug() << flag;
+    }
 
     return a.exec();
 }
