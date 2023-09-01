@@ -183,7 +183,16 @@ QVector<int> toGray::toGrayArray(QImage image,int i)
         }
         break;
     default:
-        break;
+        for(int i = 0; i < height; i ++)
+        {
+            const QRgb *pSrc = (QRgb *)image.constScanLine(i);
+            uchar *pDest = (uchar *)ret.scanLine(i);
+
+            for( int j = 0; j < width; j ++)
+            {
+                 pDest[j] = qGray(pSrc[j]);
+            }
+        }
     }
 
     int size = image.height();

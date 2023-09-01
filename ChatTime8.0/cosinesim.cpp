@@ -10,6 +10,8 @@ double cosineSim::cal(QImage img1,QImage img2,int i)
 {
     toGray tog;
     QVector<int> a1,a2;
+    img1 = img1.scaled(160,90,Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    img2 = img2.scaled(160,90,Qt::KeepAspectRatio, Qt::SmoothTransformation);
     a1 = tog.toGrayArray(img1,i);
     a2 = tog.toGrayArray(img2,i);
     int len = 88*88;
@@ -18,11 +20,16 @@ double cosineSim::cal(QImage img1,QImage img2,int i)
     double denom_a = 0.0;
     double denom_b = 0.0;
 
-    for (int i = 0; i < len; i++)
+    for (int j = 0; j < len; j++)
     {
-        dot += a1[i] * a2[i];
-        denom_a += a1[i] * a1[i];
-        denom_b += a2[i] * a2[i];
+        dot += a1[j] * a2[j];
+        denom_a += a1[j] * a1[j];
+        denom_b += a2[j] * a2[j];
+    }
+
+    if(dot == 0 || denom_a == 0 || denom_b == 0)
+    {
+        return -1;
     }
 
     return dot / (sqrt(denom_a) * sqrt(denom_b));

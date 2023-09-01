@@ -1,4 +1,4 @@
-QT       += core gui network sql multimedia
+QT       += core gui network sql multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -36,7 +36,13 @@ SOURCES += \
     speech.cpp \
     user.cpp \
     widget.cpp \
-    protocol.cpp
+    protocol.cpp \
+    detect.cpp \
+    addpic.cpp \
+    conv.cpp \
+    cosinesim.cpp \
+    randomforest.cpp \
+    togray.cpp
 
 HEADERS += \
     aiaudio.h \
@@ -60,7 +66,13 @@ HEADERS += \
     uishadow.h \
     user.h \
     widget.h \
-    protocol.h
+    protocol.h \
+    detect.h \
+    addpic.h \
+    conv.h \
+    cosinesim.h \
+    randomforest.h \
+    togray.h
 
 FORMS += \
     aiaudio.ui \
@@ -75,7 +87,10 @@ FORMS += \
     fileoperation.ui \
     home.ui \
     register.ui \
-    widget.ui
+    widget.ui \
+    detect.ui \
+    addpic.ui
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -48,7 +48,7 @@ void MainWindow::on_pushButton_clicked()
         QString nameseed = time.toString("yy-MM-dd hh-mm-ss");//将当前时间格式化，注意：时分秒之间不能用:连接，因为文件命名时不可以使用:
         capture->capture("/home/liutinghan_1120210576/Desktop/picture/"+ nameseed +".jpg");
         QMessageBox::information(this, "成功", "成功拍照");
-        QImage *image = new QImage("/home/liutinghan_1120210576/Desktop/picture/lth1.jpg");
+//        QImage *image = new QImage("/home/liutinghan_1120210576/Desktop/picture/lth1.jpg");
 
 //    //截取用户登录时的图片，截取后再运行main中的随机森林
 //        capture = new QCameraImageCapture(ca);

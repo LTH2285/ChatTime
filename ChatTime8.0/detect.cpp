@@ -59,7 +59,7 @@ void detect::on_pushButton_clicked()
     QMessageBox::information(this, "成功", "成功拍照");
 //        QImage *image = new QImage("login1.jpg");
     QImage *image = new QImage(path);
-    if(image->width()>=160)
+    if(image->width()!=160)
     {
         QImage out = image->scaled(160,90,Qt::KeepAspectRatio, Qt::SmoothTransformation);
         bool flag = out.save(path, "JPG", 20);

@@ -22,7 +22,7 @@ bool randomForest::makeDecision(QVector<QImage> allPic,QImage shot)
             double temp = css.cal(shot,allPic[i],j);
             if (temp>max)
                 max = temp;
-            if (temp<min)
+            if (0<temp && temp<min)
                 min = temp;
         }
     }
